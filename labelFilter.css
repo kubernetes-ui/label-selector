@@ -430,8 +430,10 @@
 .filter .navbar-filter-widget .label-filter {
   background: #ffffff;
   float: left;
+  max-width: 100%;
   min-width: 250px;
   min-height: 41px;
+  overflow-x: scroll;
   border: 1px solid #b7b7b7;
   border-radius: 1px;
 }
@@ -502,8 +504,9 @@
   max-width: 350px;
   word-wrap: break-word;
   white-space: pre-wrap;
-}
-.filter .active-filters .label-filter-active-filters .label + .label {
+  /* Necessary even if line-height is set on active-filters
+           when a label wraps. Otherwise, there is no margin or padding
+           between filter and the input above. */
   margin-top: 2px;
 }
 @media (min-width: 768px) {
