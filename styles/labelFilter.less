@@ -106,8 +106,10 @@
     .label-filter {
       background: @navbar-label-filter-bg;
       float: left;
+      max-width: 100%;
       min-width: @label-filter-default-width;
       min-height: @navbar-input-height;
+      overflow-x: scroll;
       border: @navbar-menu-border;
       border-radius: @selectize-border-radius;
       .selectize-control {
@@ -189,9 +191,10 @@
         max-width: 350px;
         word-wrap: break-word;
         white-space: pre-wrap;
-        +.label {
-          margin-top:2px;
-        }
+        /* Necessary even if line-height is set on active-filters
+           when a label wraps. Otherwise, there is no margin or padding
+           between filter and the input above. */
+        margin-top: 2px;
       }
     }
   }
