@@ -107,11 +107,7 @@ angular.module('kubernetesUI')
           )
           .append(
             $('<span>')
-              .text("Clear all filters")
-          )
-          .append(
-            $('<i>')
-              .addClass("fa fa-times")
+              .text("Clear filters")
           )
       ).click(function() {
         $(this).hide();

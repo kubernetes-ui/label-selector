@@ -476,12 +476,9 @@
 .filter .navbar-filter-widget .label-filter-add.btn.disabled {
   opacity: .75;
 }
-.filter .active-filters {
-  margin-top: 3px;
-}
 .filter .active-filters .label-filter-active {
-  display: block;
-  margin: 2px 0;
+  display: inline-block;
+  margin: 2px 5px 2px 0;
 }
 .filter .active-filters .label-filter-active .label {
   border-radius: 1px;
@@ -490,10 +487,10 @@
   padding-top: .3em;
 }
 .filter .active-filters .label-filter-active .label-filtering-remove-all i.fa.fa-times {
-  margin-left: 3px;
+  margin-left: 5px;
 }
 .filter .active-filters .label-filter-active-filters {
-  display: block;
+  display: inline-block;
 }
 .filter .active-filters .label-filter-active-filters .label {
   background: #006e9c;
@@ -517,7 +514,6 @@
 @media (min-width: 992px) {
   .filter .active-filters {
     margin-top: 0;
-    padding-top: 25px;
   }
   .filter .active-filters .label-filter-active-filters :first-child {
     margin-right: 0;
