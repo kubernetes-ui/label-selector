@@ -430,10 +430,8 @@
 .filter .navbar-filter-widget .label-filter {
   background: #ffffff;
   float: left;
-  max-width: 100%;
   min-width: 250px;
   min-height: 41px;
-  overflow-x: scroll;
   border: 1px solid #b7b7b7;
   border-radius: 1px;
 }
