@@ -49,8 +49,9 @@ angular.module('kubernetesUI')
   // Creates the filtering widget input inside of filterInputElement
   // Creates the filtering widget active filters boxes inside of activeFiltersElement
   // filterInputElement and activeFiltersElement should be empty HTML nodes
-  LabelFilter.prototype.setupFilterWidget = function(filterInputElement, activeFiltersElement) {
+  LabelFilter.prototype.setupFilterWidget = function(filterInputElement, activeFiltersElement, opts) {
     var self = this;
+    var opts = opts || {};
 
     this._labelFilterRootElement = filterInputElement;
     this._labelFilterActiveFiltersRootElement = activeFiltersElement;
@@ -83,12 +84,8 @@ angular.module('kubernetesUI')
       .attr("disabled", true)
       .appendTo(filterInputElement)
       .append(
-        $('<i>')
-          .addClass("fa fa-plus")
-      )
-      .append(
         $('<span>')
-          .text(" Filter")
+          .text(opts.addButtonText || "Add Filter")
       );
 
     // Render active filters area
