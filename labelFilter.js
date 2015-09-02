@@ -267,8 +267,7 @@ angular.module('kubernetesUI')
       self._labelFilterAddBtn.addClass("disabled").prop('disabled', true);              
 
       // show the filtering active indicator and add the individual filter to the list of active filters
-      self._labelFilterActiveElement.show();
-      self._addActiveFilter(key, operator, values);
+      self.addActiveFilter(key, operator, values);
     });
 
     // If we are transitioning scenes we may still have filters active but be re-creating the DOM for the widget
@@ -280,7 +279,10 @@ angular.module('kubernetesUI')
     }      
   };
 
-
+  LabelFilter.prototype.addActiveFilter = function(key, operator, values) {
+    this._labelFilterActiveElement.show();
+    this._addActiveFilter(key, operator, values);    
+  }
 
   LabelFilter.prototype._addActiveFilter = function(key, operator, values) {
     var filter = this._labelSelector.addConjunct(key, operator, values);
