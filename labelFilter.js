@@ -42,6 +42,25 @@ angular.module('kubernetesUI')
     return this._labelSelector;
   };
 
+
+  LabelFilter.prototype.setLabelSelector = function(labelSelector) {
+    this._labelFilterActiveFiltersElement.empty();
+    this._labelSelector = labelSelector;
+
+    if (!this._labelSelector.isEmpty()) {
+      this._labelFilterActiveElement.show();
+      var self = this;
+      this._labelSelector.each(function(filter) {
+        self._renderActiveFilter(filter);
+      });
+    }
+    else {
+      this._labelFilterActiveElement.hide();
+    }
+
+    this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
+  };  
+
   LabelFilter.prototype.onActiveFiltersChanged = function(callback) {
     this._onActiveFiltersChangedCallbacks.add(callback);
   };
@@ -282,7 +301,7 @@ angular.module('kubernetesUI')
   LabelFilter.prototype.addActiveFilter = function(key, operator, values) {
     this._labelFilterActiveElement.show();
     this._addActiveFilter(key, operator, values);    
-  }
+  };
 
   LabelFilter.prototype._addActiveFilter = function(key, operator, values) {
     var filter = this._labelSelector.addConjunct(key, operator, values);
