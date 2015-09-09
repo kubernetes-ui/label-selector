@@ -25,6 +25,11 @@ angular.module('kubernetesUI')
 
   LabelFilter.prototype.setLabelSuggestions = function(suggestions) {
     this._existingLabels = suggestions;
+    this._labelFilterKeySelectize.clearOptions();
+    var self = this;
+    this._labelFilterKeySelectize.load(function(callback) {
+      callback(self._getLabelFilterKeys());
+    });
   };
 
   LabelFilter.prototype._extractLabelsFromItem = function(item, map) {
@@ -185,15 +190,7 @@ angular.module('kubernetesUI')
         self._labelFilterAddBtn.addClass("disabled").prop('disabled', true);
       },
       load: function(query, callback) {
-        var options = [
-        ];
-        var keys = Object.keys(self._existingLabels);
-        for (var i = 0; i < keys.length; i++) {
-          options.push({
-            key: keys[i]
-          });
-        }                
-        callback(options);
+        callback(self._getLabelFilterKeys())
       }
     });
 
@@ -297,6 +294,18 @@ angular.module('kubernetesUI')
       });
     }      
   };
+
+  LabelFilter.prototype._getLabelFilterKeys = function() {
+    var options = [];
+    var keys = Object.keys(this._existingLabels);
+    for (var i = 0; i < keys.length; i++) {
+      options.push({
+        key: keys[i]
+      });
+    }
+
+    return options;
+  }
 
   LabelFilter.prototype.addActiveFilter = function(key, operator, values) {
     this._labelFilterActiveElement.show();
