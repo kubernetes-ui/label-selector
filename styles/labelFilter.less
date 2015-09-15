@@ -26,7 +26,7 @@
 @screen-md-min:              @screen-md;
 @screen-desktop:             @screen-md-min;
 
-@label-filter-default-width: 250px;
+@label-filter-default-width: 230px;
 @selectize-active-label-bg: #006e9c;
 @selectize-arrow-size: 0;
 @selectize-border-radius: 1px;
@@ -87,6 +87,7 @@
   &.multi {
     .selectize-input {
       [data-value] {
+        padding: 0 6px; // prevent text jump when 
         text-shadow: 0 1px 0 rgba(0,0,0,0.2);
         .selectize-border-radius(1px);
         .selectize-vertical-gradient(@selectize-color-item, @selectize-color-item);
@@ -127,6 +128,7 @@
           }
           input {
             font-size: @font-size-large;
+            height: 24px; // keep IE from clipping text descenders
           }
         }
         .selectize-dropdown {

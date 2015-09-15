@@ -402,6 +402,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#00000000', GradientType=0);
 }
 .selectize-control.multi .selectize-input [data-value] {
+  padding: 0 6px;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
   -webkit-border-radius: 1px;
   -moz-border-radius: 1px;
@@ -430,7 +431,7 @@
 .filter .navbar-filter-widget .label-filter {
   background: #ffffff;
   float: left;
-  min-width: 250px;
+  min-width: 230px;
   min-height: 41px;
   border: 1px solid #b7b7b7;
   border-radius: 1px;
@@ -454,6 +455,7 @@
 }
 .filter .navbar-filter-widget .label-filter .selectize-control .selectize-input input {
   font-size: 15px;
+  height: 24px;
 }
 .filter .navbar-filter-widget .label-filter .selectize-control .selectize-dropdown {
   min-width: 100px;
@@ -464,7 +466,7 @@
   border: 1px solid #b7b7b7;
 }
 .filter .navbar-filter-widget .label-filter .selectize-control.label-filter-key .selectize-input.not-full {
-  width: 250px;
+  width: 230px;
 }
 .filter .navbar-filter-widget .label-filter-add.btn {
   border-left: 0;
