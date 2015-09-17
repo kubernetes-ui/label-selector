@@ -25,11 +25,13 @@ angular.module('kubernetesUI')
 
   LabelFilter.prototype.setLabelSuggestions = function(suggestions) {
     this._existingLabels = suggestions;
-    this._labelFilterKeySelectize.clearOptions();
-    var self = this;
-    this._labelFilterKeySelectize.load(function(callback) {
-      callback(self._getLabelFilterKeys());
-    });
+    if (this._labelFilterKeySelectize) {
+      this._labelFilterKeySelectize.clearOptions();
+      var self = this;
+      this._labelFilterKeySelectize.load(function(callback) {
+        callback(self._getLabelFilterKeys());
+      });
+    }
   };
 
   LabelFilter.prototype._extractLabelsFromItem = function(item, map) {
