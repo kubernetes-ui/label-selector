@@ -1,4 +1,6 @@
-// selector (optional) - the JSON format as returned by k8s API
+// selector (optional) - the JSON format as returned by k8s API, will also
+//      handle {key: null} as the key exists operator (not currently returned
+//      by API)
 // emptySelectsAll (optional) - whether a label selector with no conjuncts
 //      selects objects.  Typical behavior is false.  Example of an
 //      exceptional case is when filtering by labels, no label selectors
@@ -9,9 +11,15 @@ function LabelSelector(selector, emptySelectsAll) {
   // expects the JSON format as returned by k8s API
   // TODO - currently k8s only returns key: value
   // which represents 'key in (value)'
+  // for now also handle key: null as key exists
   if (selector) {
     angular.forEach(selector, function(details, key) {
-      this.addConjunct(key, "in", [details]);
+      if (details || details === "") {
+        this.addConjunct(key, "in", [details]);
+      }
+      else {
+       this.addConjunct(key, "exists", []); 
+      }
     }, this);
   }
 }
@@ -78,13 +86,13 @@ LabelSelector.prototype.matches = function(resource) {
     var conjunct = this._conjuncts[id];
     switch(conjunct.operator) {
       case "exists":
-        if (!labels[conjunct.key]) {
+        if (!labels[conjunct.key] && labels[conjunct.key] !== "") {
           return false;
         }
         break;
       case "in":
         var found = false;
-        if (labels[conjunct.key]) {
+        if (labels[conjunct.key] || labels[conjunct.key] === "") {
           for (var i = 0; !found && i < conjunct.values.length; i++) {
             if (labels[conjunct.key] == conjunct.values[i]) {
               found = true;
@@ -143,7 +151,12 @@ LabelSelector.prototype._getStringForConjunct = function(conjunct) {
     }
     conjunctString += " in (";
     for (var i = 0; i < conjunct.values.length; i++) {
-      conjunctString += conjunct.values[i];
+      if (conjunct.values[i] === '') {
+        conjunctString += "\"\"";
+      }
+      else {
+        conjunctString += conjunct.values[i];
+      }
       if (i != conjunct.values.length - 1) {
         conjunctString += ", ";
       }
