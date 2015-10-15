@@ -50,7 +50,7 @@ angular.module('kubernetesUI')
   };
 
 
-  LabelFilter.prototype.setLabelSelector = function(labelSelector) {
+  LabelFilter.prototype.setLabelSelector = function(labelSelector, dontFireCallbacks) {
     this._labelFilterActiveFiltersElement.empty();
     this._labelSelector = labelSelector;
 
@@ -65,7 +65,9 @@ angular.module('kubernetesUI')
       this._labelFilterActiveElement.hide();
     }
 
-    this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
+    if (!dontFireCallbacks) {
+      this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
+    }
   };  
 
   LabelFilter.prototype.onActiveFiltersChanged = function(callback) {
