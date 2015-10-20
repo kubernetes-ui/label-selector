@@ -404,9 +404,9 @@
 .selectize-control.multi .selectize-input [data-value] {
   padding: 0 6px;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-  -webkit-border-radius: 1px;
-  -moz-border-radius: 1px;
-  border-radius: 1px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
   background-color: #006e9c;
   background-image: -moz-linear-gradient(top, #006e9c, #006e9c);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#006e9c), to(#006e9c));
@@ -497,9 +497,11 @@
 .filter .active-filters .label-filter-active-filters .label {
   background: #006e9c;
   display: inline-block;
+  border-radius: 2px;
   font-weight: normal;
   padding-bottom: .3em;
   padding-top: .3em;
+  margin-left: 0;
   margin-right: 3px;
   max-width: 350px;
   word-wrap: break-word;
@@ -512,18 +514,5 @@
 @media (min-width: 768px) {
   .filter .active-filters {
     margin-top: 0;
-  }
-}
-@media (min-width: 992px) {
-  .filter .active-filters {
-    margin-top: 0;
-  }
-  .filter .active-filters .label-filter-active-filters :first-child {
-    margin-right: 0;
-  }
-  .filter .active-filters .label-filter-active-filters .label + .label {
-    margin-left: 3px;
-    margin-top: 2px;
-    margin-right: 0;
   }
 }
