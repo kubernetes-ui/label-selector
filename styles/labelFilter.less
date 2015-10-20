@@ -89,7 +89,7 @@
       [data-value] {
         padding: 0 6px; // prevent text jump when 
         text-shadow: 0 1px 0 rgba(0,0,0,0.2);
-        .selectize-border-radius(1px);
+        .selectize-border-radius(2px);
         .selectize-vertical-gradient(@selectize-color-item, @selectize-color-item);
       }
     }
@@ -184,9 +184,11 @@
       .label {
         background: @selectize-active-label-bg;
         display: inline-block;
+        border-radius: 2px;
         font-weight: normal;
         padding-bottom: .3em;
         padding-top: .3em;
+        margin-left: 0;
         margin-right: 3px;
         max-width: 350px;
         word-wrap: break-word;
@@ -207,25 +209,3 @@
     }
   }
 }
-
-@media (min-width: @screen-md-min) {
-  .filter {
-    .active-filters {
-      margin-top: 0;
-      .label-filter-active-filters {
-        :first-child {
-          margin-right: 0;
-        }
-        .label {
-          +.label {
-            margin-left: 3px;
-            margin-top: 2px;
-            margin-right: 0;
-          }
-        }
-      }
-    }
-  }
-}
-
-
