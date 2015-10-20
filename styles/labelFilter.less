@@ -187,6 +187,7 @@
         font-weight: normal;
         padding-bottom: .3em;
         padding-top: .3em;
+        margin-left: 0;
         margin-right: 3px;
         max-width: 350px;
         word-wrap: break-word;
@@ -207,25 +208,3 @@
     }
   }
 }
-
-@media (min-width: @screen-md-min) {
-  .filter {
-    .active-filters {
-      margin-top: 0;
-      .label-filter-active-filters {
-        :first-child {
-          margin-right: 0;
-        }
-        .label {
-          +.label {
-            margin-left: 3px;
-            margin-top: 2px;
-            margin-right: 0;
-          }
-        }
-      }
-    }
-  }
-}
-
-
