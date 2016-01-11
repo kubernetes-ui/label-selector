@@ -390,6 +390,7 @@
 }
 .selectize-control.plugin-remove_button [data-value] .remove {
   border-left: 1px solid #005c83;
+  padding: 0;
 }
 .selectize-control.single .selectize-input {
   background-color: rgba(0, 0, 0, 0);
@@ -403,6 +404,7 @@
 }
 .selectize-control.multi .selectize-input [data-value] {
   padding: 0 6px;
+  margin: 0 3px 0 0;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -432,7 +434,7 @@
   background: #ffffff;
   float: left;
   min-width: 230px;
-  min-height: 41px;
+  min-height: 30px;
   border: 1px solid #b7b7b7;
   border-radius: 1px;
 }
@@ -441,10 +443,10 @@
 }
 .filter .navbar-filter-widget .label-filter .selectize-control .selectize-input {
   vertical-align: middle;
-  padding-bottom: 0px;
+  padding: 3px 8px;
   border: 0;
   box-shadow: none;
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.66666667;
 }
 .filter .navbar-filter-widget .label-filter .selectize-control .selectize-input.full {
@@ -454,15 +456,15 @@
   border: 0;
 }
 .filter .navbar-filter-widget .label-filter .selectize-control .selectize-input input {
-  font-size: 15px;
-  height: 24px;
+  font-size: 13px;
+  height: 21px;
 }
 .filter .navbar-filter-widget .label-filter .selectize-control .selectize-dropdown {
   min-width: 100px;
   width: auto !important;
   white-space: nowrap;
   z-index: 9999;
-  margin: 7px 0 0 -1px;
+  margin: 1px 0 0 -1px;
   border: 1px solid #b7b7b7;
 }
 .filter .navbar-filter-widget .label-filter .selectize-control.label-filter-key .selectize-input.not-full {
@@ -471,9 +473,10 @@
 .filter .navbar-filter-widget .label-filter-add.btn {
   border-left: 0;
   border-radius: 0;
+  font-size: 13px;
   margin-right: 10px;
   opacity: 1;
-  height: 41px;
+  height: 30px;
 }
 .filter .navbar-filter-widget .label-filter-add.btn.disabled {
   opacity: .75;

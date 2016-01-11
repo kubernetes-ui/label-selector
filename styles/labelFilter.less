@@ -42,7 +42,7 @@
 @selectize-vertical-gradient-color-start: #178ee9;
 @selectize-width-item-border: 0;
 @navbar-label-filter-bg: #fff;
-@navbar-input-height: 41px;
+@navbar-input-height: 30px;
 @navbar-menu-border: 1px solid @btn-default-border;
 
 
@@ -73,6 +73,7 @@
     font-size: @font-size-base;
     .remove {
       border-left: 1px solid darken(@dark-blue, 5%);
+      padding: 0;
     }
   }
 }
@@ -87,7 +88,8 @@
   &.multi {
     .selectize-input {
       [data-value] {
-        padding: 0 6px; // prevent text jump when 
+        padding: 0 6px; // prevent text jump when
+        margin: 0 3px 0 0;
         text-shadow: 0 1px 0 rgba(0,0,0,0.2);
         .selectize-border-radius(2px);
         .selectize-vertical-gradient(@selectize-color-item, @selectize-color-item);
@@ -115,10 +117,10 @@
         display: inline-block;
         .selectize-input {
           vertical-align: middle;
-          padding-bottom: 0px;
+          padding: 3px 8px;
           border: 0;
           box-shadow: none;
-          font-size: @font-size-large;
+          font-size: @font-size-base;
           line-height: @line-height-base;
           &.full {
             min-width: initial;
@@ -127,8 +129,8 @@
             }
           }
           input {
-            font-size: @font-size-large;
-            height: 24px; // keep IE from clipping text descenders
+            font-size: @font-size-base;
+            height: 21px; // keep IE from clipping text descenders
           }
         }
         .selectize-dropdown {
@@ -136,8 +138,8 @@
           width: auto !important; // overwrite inline width
           white-space: nowrap;
           z-index: 9999;
-          margin: 7px 0 0 -1px;
-          border: @navbar-menu-border; 
+          margin: 1px 0 0 -1px;
+          border: @navbar-menu-border;
           .selectize-dropdown-content {
             .option {
               &.selected {}
@@ -156,6 +158,7 @@
     .label-filter-add.btn {
       border-left: 0;
       border-radius: 0;
+      font-size: @font-size-base;
       margin-right: @selectize-padding-x;
       opacity: 1;
       height: @navbar-input-height;

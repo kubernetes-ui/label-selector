@@ -74,7 +74,7 @@ angular.module('kubernetesUI')
     if (!dontFireCallbacks) {
       this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
     }
-  };  
+  };
 
   LabelFilter.prototype.onActiveFiltersChanged = function(callback) {
     this._onActiveFiltersChangedCallbacks.add(callback);
@@ -104,17 +104,17 @@ angular.module('kubernetesUI')
       .addClass("label-filter-operator")
       .attr("placeholder", "matching(...)")
       .hide()
-      .appendTo(labelFilterElem);      
+      .appendTo(labelFilterElem);
 
     this._labelFilterValuesInput = $('<select>')
       .addClass("label-filter-values")
       .attr("placeholder", "Value(s)")
       .attr("multiple", true)
       .hide()
-      .appendTo(labelFilterElem);   
+      .appendTo(labelFilterElem);
 
     this._labelFilterAddBtn = $('<button>')
-      .addClass("label-filter-add btn btn-default btn-lg disabled")
+      .addClass("label-filter-add btn btn-default disabled")
       .attr("disabled", true)
       .appendTo(filterInputElement)
       .append(
@@ -177,17 +177,17 @@ angular.module('kubernetesUI')
             return;
           }
           //for each value for key
-          for (var i = 0; i < optionsMap[key].length; i++) {                  
+          for (var i = 0; i < optionsMap[key].length; i++) {
             options.push(optionsMap[key][i]);
-          }                
+          }
           callback(options);
-        });          
+        });
 
         self._labelFilterOperatorSelectizeInput.css("display", "inline-block");
         var operator = self._labelFilterOperatorSelectize.getValue();
         if (!operator) {
           self._labelFilterOperatorSelectize.focus();
-        }                
+        }
         else {
           selectizeValues.focus();
         }
@@ -252,7 +252,7 @@ angular.module('kubernetesUI')
         self._labelFilterAddBtn.removeClass("disabled").prop('disabled', false);
       },
       onItemRemove: function(value) {
-        // disable button if we have removed all the values                
+        // disable button if we have removed all the values
       },
       load: function(query, callback) {
         var options = [];
@@ -266,11 +266,11 @@ angular.module('kubernetesUI')
         if (!optionsMap[key]) {
           callback({});
           return;
-        }        
+        }
         //for each value for key
-        for (var i = 0; i < optionsMap[key].length; i++) {                  
+        for (var i = 0; i < optionsMap[key].length; i++) {
           options.push(optionsMap[key][i]);
-        }                
+        }
         callback(options);
       }
     });
@@ -290,7 +290,7 @@ angular.module('kubernetesUI')
       self._labelFilterOperatorSelectize.clear();
       self._labelFilterValuesSelectizeInput.hide();
       self._labelFilterValuesSelectize.clear();
-      self._labelFilterAddBtn.addClass("disabled").prop('disabled', true);              
+      self._labelFilterAddBtn.addClass("disabled").prop('disabled', true);
 
       // show the filtering active indicator and add the individual filter to the list of active filters
       self.addActiveFilter(key, operator, values);
@@ -302,7 +302,7 @@ angular.module('kubernetesUI')
       this._labelSelector.each(function(filter) {
         self._renderActiveFilter(filter);
       });
-    }      
+    }
   };
 
   LabelFilter.prototype._getLabelFilterKeys = function() {
@@ -319,12 +319,12 @@ angular.module('kubernetesUI')
 
   LabelFilter.prototype.addActiveFilter = function(key, operator, values) {
     this._labelFilterActiveElement.show();
-    this._addActiveFilter(key, operator, values);    
+    this._addActiveFilter(key, operator, values);
   };
 
   LabelFilter.prototype._addActiveFilter = function(key, operator, values) {
     var filter = this._labelSelector.addConjunct(key, operator, values);
-    this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);  
+    this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
     this._renderActiveFilter(filter);
   };
 
@@ -345,7 +345,7 @@ angular.module('kubernetesUI')
         $('<i>')
           .addClass("fa fa-times")
       )
-      .appendTo(this._labelFilterActiveFiltersElement);  
+      .appendTo(this._labelFilterActiveFiltersElement);
   };
 
   LabelFilter.prototype._removeActiveFilter = function(e) {
