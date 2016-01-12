@@ -97,7 +97,7 @@ angular.module('kubernetesUI')
 
     this._labelFilterKeyInput = $('<select>')
       .addClass("label-filter-key")
-      .attr("placeholder", "Label key ")
+      .attr("placeholder", "Filter by label ")
       .appendTo(labelFilterElem);
 
     this._labelFilterOperatorInput = $('<select>')
