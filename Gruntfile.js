@@ -67,6 +67,7 @@ module.exports = function(grunt) {
           'labelFilter.css': 'styles/labelFilter.less'
         },
         options: {
+          plugins : [ new (require('less-plugin-autoprefix'))({browsers : [ "last 2 versions" ]}) ],
           cleancss: true,
           paths: ['styles']
         }

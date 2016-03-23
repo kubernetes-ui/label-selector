@@ -121,12 +121,16 @@ angular.module('kubernetesUI')
         $('<span>')
           .text(opts.addButtonText || "Add Filter")
       );
-
+    
+    this._labelFilterActiveFiltersElement = $('<span>')
+      .addClass("label-filter-active-filters")
+      .appendTo(activeFiltersElement);
+      
     // Render active filters area
     this._labelFilterActiveElement = $('<span>')
-      .addClass("label-filter-active")
+      .addClass("label-filter-clear")
       .hide()
-      .appendTo(activeFiltersElement)
+      .appendTo(this._labelFilterActiveFiltersElement)
       .append(
         $('<a>')
           .addClass("label-filtering-remove-all label label-primary")
@@ -134,7 +138,6 @@ angular.module('kubernetesUI')
           .append(
             $('<i>')
               .addClass("fa fa-filter")
-              .css("padding-right", "5px")
           )
           .append(
             $('<span>')
@@ -146,12 +149,9 @@ angular.module('kubernetesUI')
         self._clearActiveFilters();
       });
 
-    this._labelFilterActiveFiltersElement = $('<span>')
-      .addClass("label-filter-active-filters")
-      .appendTo(activeFiltersElement);
-
     // Create selectize widgets for the select fields and wire them together
     this._labelFilterKeyInput.selectize({
+      dropdownParent: "body",
       valueField: "key",
       labelField: "key",
       searchField: ["key"],
@@ -183,7 +183,7 @@ angular.module('kubernetesUI')
           callback(options);
         });
 
-        self._labelFilterOperatorSelectizeInput.css("display", "inline-block");
+        self._labelFilterOperatorSelectizeInput.css("display", "inline-flex");
         var operator = self._labelFilterOperatorSelectize.getValue();
         if (!operator) {
           self._labelFilterOperatorSelectize.focus();
@@ -201,6 +201,12 @@ angular.module('kubernetesUI')
       },
       load: function(query, callback) {
         callback(self._getLabelFilterKeys())
+      },
+      onFocus: function() {
+        labelFilterElem.addClass("filter-active");
+      },
+      onBlur: function() {
+        labelFilterElem.removeClass("filter-active");
       }
     });
 
@@ -208,6 +214,7 @@ angular.module('kubernetesUI')
     this._labelFilterKeySelectizeInput = $('.selectize-control.label-filter-key', labelFilterElem);
 
     this._labelFilterOperatorInput.selectize({
+      dropdownParent: "body",
       valueField: "type",
       labelField: "label",
       searchField: ["label"],
@@ -224,13 +231,19 @@ angular.module('kubernetesUI')
         }
 
         // otherwise
-        self._labelFilterValuesSelectizeInput.css("display", "inline-block");
+        self._labelFilterValuesSelectizeInput.css("display", "inline-flex");
         self._labelFilterValuesSelectize.focus();
       },
       onItemRemove: function(value) {
         self._labelFilterValuesSelectizeInput.hide();
         self._labelFilterValuesSelectize.clear();
         self._labelFilterAddBtn.addClass("disabled").prop('disabled', true);
+      },
+      onFocus: function() {
+        labelFilterElem.addClass("filter-active");
+      },
+      onBlur: function() {
+        labelFilterElem.removeClass("filter-active");
       }
     });
 
@@ -239,6 +252,7 @@ angular.module('kubernetesUI')
     this._labelFilterOperatorSelectizeInput.hide();
 
     this._labelFilterValuesInput.selectize({
+      dropdownParent: "body",
       valueField: "value",
       labelField: "value",
       searchField: ["value"],
@@ -272,6 +286,12 @@ angular.module('kubernetesUI')
           options.push(optionsMap[key][i]);
         }
         callback(options);
+      },
+      onFocus: function() {
+        labelFilterElem.addClass("filter-active");
+      },
+      onBlur: function() {
+        labelFilterElem.removeClass("filter-active");
       }
     });
 
@@ -338,8 +358,6 @@ angular.module('kubernetesUI')
       .append(
         $('<span>')
           .text(filter.string)
-          // TODO move to the less styles instead
-          .css("padding-right", "5px")
       )
       .append(
         $('<i>')
