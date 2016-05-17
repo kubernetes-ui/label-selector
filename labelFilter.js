@@ -145,7 +145,9 @@ angular.module('kubernetesUI')
           )
       ).click(function() {
         $(this).hide();
-        self._labelFilterActiveFiltersElement.empty();
+        self._labelFilterActiveFiltersElement
+          .find('.label-filter-active-filter')
+          .remove();
         self._clearActiveFilters();
       });
 
