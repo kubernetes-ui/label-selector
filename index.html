@@ -21,16 +21,16 @@
     <!-- endbuild -->
      <style type="text/css">
 
-
     </style>
   </head>
 <body ng-app="exampleApp">
-    <div class="filter" style="margin-top: 10px; margin-left: 10px;">
-        <div class="navbar-filter-widget">
-        </div>
-        <div class="active-filters">
-        </div>
+  <div style="margin: 10px 10px 0; position:relative">
+    <div class="filter">
+        <div class="navbar-filter-widget"></div>
     </div>
+    <div class="active-filters"></div>
+  </div>
+
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -60,15 +60,25 @@
                 // type in their own labels/values)
                 LabelFilter.setLabelSuggestions({
                     label_1: [
-                        {value: "value_1_1"},
-                        {value: "value_1_2"},
-                        {value: "value_1_3"}
+                        {value: "value-1-1"},
+                        {value: "value-1-2"},
+                        {value: "value-1-3"}
                     ],
                     label_2: [
-                        {value: "value_2_1"},
-                        {value: "value_2_2"},
-                        {value: "value_2_3"}
-                    ]                    
+                        {value: "value-2-1"},
+                        {value: "value-2-2"},
+                        {value: "nonbreaking1212121212121212121212121212121212121212121212"}
+                    ],
+                    label_3333333333333333333333333333333333333333333333: [
+                        {value: "value-3-1"},
+                        {value: "value-3-2"},
+                        {value: "value31212121212121212121212121212121212121212121212"}
+                    ] ,
+                    label_4444444444_4444444444_4444444444_4444444444: [
+                        {value: "value-4-1"},
+                        {value: "value-4-2"},
+                        {value: "value-41212121212121-212121212121-21212121212-1212121212"}
+                    ]                  
                 });
 
                 // Do something when the active filters change

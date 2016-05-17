@@ -9,24 +9,31 @@
 @color-top: transparent;
 @color-bottom: transparent;
 @btn-default-border: #b7b7b7;
-@font-size-base: 13px;
+@font-size-base: 12px;
 @font-size-large: ceil(@font-size-base * 1.1); // ~15px
-@line-height-base: 1.66666667; // 20/12
 @dark-blue: #006e9c;
 
-// Small screen / tablet
-// Note: Deprecated @screen-sm and @screen-tablet as of v3.0.1
+@screen-xs:                  480px;
+@screen-xs-min:              @screen-xs;
+@screen-xs-max:              (@screen-sm-min - 1);
+
 @screen-sm:                  768px;
 @screen-sm-min:              @screen-sm;
+@screen-sm-max:              (@screen-md-min - 1);
 @screen-tablet:              @screen-sm-min;
 
-// Medium screen / desktop
-// Note: Deprecated @screen-md and @screen-desktop as of v3.0.1
 @screen-md:                  992px;
 @screen-md-min:              @screen-md;
 @screen-desktop:             @screen-md-min;
 
-@label-filter-default-width: 230px;
+@screen-lg:                  1200px;
+@screen-lg-min:              @screen-lg;
+@screen-md-max:              (@screen-lg-min - 1);
+
+@screen-xlg:                  1400px;
+@screen-xlg-min:              @screen-xlg;
+@screen-lg-max:              (@screen-xlg-min - 1);
+
 @selectize-active-label-bg: #006e9c;
 @selectize-arrow-size: 0;
 @selectize-border-radius: 1px;
@@ -45,6 +52,16 @@
 @navbar-label-filter-bg: #fff;
 @navbar-input-height: 27px;
 @navbar-menu-border: 1px solid @btn-default-border;
+
+//** Border color for inputs on focus
+@input-border-focus:             #66afe9;
+//** .form-control-focus
+.filter-active-focus(@color: @input-border-focus) {
+  @color-rgba: rgba(red(@color), green(@color), blue(@color), .6);
+  border-color: @color;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @color-rgba;
+}
 
 
 // Clearfix
@@ -68,6 +85,12 @@
   }
 }
 
+.word-break-all() {
+   word-break: break-all;  // firefox, IE
+   word-break: break-word; // non-standard for webkit
+overflow-wrap: break-word; // new name as per the CSS3 spec
+}
+
 // Override selectize remove_button code
 .selectize-control.plugin-remove_button {
   [data-value] {
@@ -78,6 +101,7 @@
     }
   }
 }
+
 
 // Override original selectize code
 .selectize-control {
@@ -91,6 +115,9 @@
       [data-value] {
         padding: 0 6px; // prevent text jump when
         margin: 0 3px 0 0;
+        &+ [data-value] {
+          margin-top: 3px;
+        }
         text-shadow: @selectize-text-shadow;
         .selectize-border-radius(2px);
         .selectize-vertical-gradient(@selectize-color-item, @selectize-color-item);
@@ -103,22 +130,40 @@
 }
 .selectize-dropdown [data-selectable], .selectize-dropdown .optgroup-header {
     padding: 5px 7px;
+    .word-break-all();
 }
 
 
 // Custom code for label filter
 .filter {
+  display:flex;
+  flex: 1 1 auto; // flex-basis needs to be auto or else Safari collapses
+  flex-flow: row nowrap;
+  align-items: stretch;
+  min-width: 220px;
   .navbar-filter-widget {
+    display:flex;
+    flex: 1 1 0%;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    min-width: 0;
     .clearfix();
     .label-filter {
       background: @navbar-label-filter-bg;
-      float: left;
-      min-width: @label-filter-default-width;
+      flex: 0 1 auto;
+      min-width: 0;
       min-height: @navbar-input-height;
       border: @navbar-menu-border;
       border-radius: @selectize-border-radius;
+      &.filter-active {
+        .filter-active-focus();
+      }
       .selectize-control {
-        display: inline-block;
+        display: inline-flex;
+        .item {
+          .word-break-all();
+          max-width: 100%;
+        }
         .selectize-input {
           background: transparent;
           vertical-align: middle;
@@ -126,9 +171,11 @@
           border: 0;
           box-shadow: none;
           font-size: @font-size-base;
-          line-height: @line-height-base;
+          flex: 0 1 auto;
+          min-width: 160px; // set default width
+          width: 100%;
           &.full {
-            min-width: initial;
+            min-width: 0; // allow value to control width
             &:after {
               border: 0;
             }
@@ -136,26 +183,6 @@
           input {
             font-size: @font-size-base;
             height: 21px; // keep IE from clipping text descenders
-          }
-        }
-        .selectize-dropdown {
-          min-width: 100px;
-          width: auto !important; // overwrite inline width
-          white-space: nowrap;
-          z-index: 9999;
-          margin: 0 0 0 -1px;
-          border: @navbar-menu-border;
-          .selectize-dropdown-content {
-            .option {
-              &.selected {}
-            }
-          }
-        }
-        &.label-filter-key {
-          .selectize-input {
-            &.not-full {
-              width: @label-filter-default-width;
-            }
           }
         }
       }
@@ -167,50 +194,76 @@
       margin-right: @selectize-padding-x;
       opacity: 1;
       height: @navbar-input-height;
+      align-items: center;
+      display:flex;
+      flex: 0 0 auto;
+      flex-direction: column;
+      justify-content:center;
       &.disabled {
         opacity: .75;
       }
     }
   }
+}
 
-  .active-filters {
-    .label-filter-active {
-      display: inline-block;
-      margin: 2px 5px 2px 0;
-      .label {
-        border-radius: 1px;
-        display: inline-block;
-        font-weight: normal;
-        padding-top: .3em;
-        text-shadow: @selectize-text-shadow;
+.selectize-dropdown {
+  z-index: 9999;
+  font-size: @font-size-base;
+  margin: 0 0 0 -1px;
+  width: 100% !important; // overwrite selectize inline width and
+  border: @navbar-menu-border;
+  .selectize-dropdown-content {
+    .option {
+      &.selected {}
+    }
+  }
+}
+
+.active-filters {
+  line-height: 0;
+  display:flex;
+  flex-direction: column;
+  .label-filter-active-filters {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding-bottom: 3px;
+    .label {
+      align-items: center;
+      background: @selectize-active-label-bg;
+      border-radius: 2px;
+      display: inline-flex;
+      flex: 0 1 auto;
+      font-size: @font-size-base;
+      font-weight: normal;
+      line-height: 13px;
+      padding-bottom: .3em;
+      padding-top: .3em;
+      margin-bottom: 2px;
+      margin-left: 0;
+      margin-right: 3px;
+      /* Necessary even if line-height is set on active-filters
+         when a label wraps. Otherwise, there is no margin or padding
+         between filter and the input above. */
+      margin-top: 2px;
+      text-shadow: @selectize-text-shadow;
+      .word-break-all();
+      white-space: normal;
+      &:hover {
+        background: @selectize-active-label-bg;
       }
-      .label-filtering-remove-all i.fa.fa-times {
-        margin-left: 5px;
+      i.fa-times {
+        font-size: @font-size-base - 1;
+        padding-left: 5px;
       }
     }
-    .label-filter-active-filters {
-      display: inline-block;
-      .label {
-        background: @selectize-active-label-bg;
-        display: inline-block;
-        border-radius: 2px;
-        font-weight: normal;
-        padding-bottom: .3em;
-        padding-top: .3em;
-        margin-left: 0;
-        margin-right: 3px;
-        max-width: 350px;
-        text-shadow: @selectize-text-shadow;
-        word-wrap: break-word;
-        white-space: pre-wrap;
-        /* Necessary even if line-height is set on active-filters
-           when a label wraps. Otherwise, there is no margin or padding
-           between filter and the input above. */
-        margin-top: 2px;
-        i.fa-times {
-          font-size: 10px;
-          margin-top: -3px;
-          vertical-align: middle;
+    .label-filter-clear {
+      display: inline-flex;
+      margin: 2px 5px 2px 0;
+      align-items: center;
+      .label-filtering-remove-all {
+        margin: 0;
+        i.fa.fa-filter {
+          padding-right: 5px;
         }
       }
     }
@@ -221,6 +274,56 @@
   .filter {
     .active-filters {
       margin-top: 0;
+    }
+    .selectize-control {
+      display: inline-block;
+    }
+  }
+  .selectize-dropdown {
+    width: auto !important; // overwrite inline selectize attribute
+    white-space: nowrap;
+  }
+  &.label-filter-key {
+    .selectize-input {
+      &.not-full {
+        width: auto;
+      }
+    }
+  }
+}
+
+.navbar-filter-widget-collapse .form-group {
+ margin-bottom: 0;
+ flex: 1 1 0%;
+ min-width: 0;
+}
+
+@media (max-width: @screen-xs-max) {
+  .selectize-dropdown {
+    left: 0 !important; // overwrite inline selectize attribute
+    margin: 0;
+  }
+}
+
+.filter .navbar-filter-widget {
+ @media(min-width: @screen-sm-min) {
+ }
+ .label-filter-add.btn {
+  margin-right: 0;
+  display:flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+ }
+}
+
+@media (max-width: @screen-xs-max) {
+ .filter .navbar-filter-widget .label-filter {
+   min-width: initial;
+   width: 84%; // Width of the input field that allows for the 'add' button to be appended down to 320px
+ }
+ .filter .navbar-filter-widget {
+    .selectize-input {
+     width: auto !important;
     }
   }
 }
