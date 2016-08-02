@@ -374,7 +374,7 @@
 }
 .selectize-dropdown [data-selectable],
 .selectize-dropdown .optgroup-header {
-  padding: 5px 7px;
+  padding: 5px 20px 5px 7px;
   word-break: break-all;
   word-break: break-word;
   overflow-wrap: break-word;
