@@ -1,7 +1,7 @@
 Kubernetes Label Selector
 ========================
 
-Provides a LabelSelector JavaScript object that understand kubernetes labels and label selector syntax, and works directly with JSON API objects from kubernetes.  Includes an AngularJS based label filtering widget.
+Provides a LabelSelector JavaScript object that understand kubernetes labels and label selector syntax, and works directly with JSON API objects from kubernetes.  Includes an AngularJS based label filtering widget. See the kubernetes documentation about [labels](http://kubernetes.io/docs/user-guide/labels/) for more information.
 
 Getting Started
 ---------------
