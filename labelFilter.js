@@ -222,12 +222,13 @@ angular.module('kubernetesUI')
       searchField: ["label"],
       options: [
         {type: "exists", label: "exists"},
+        {type: "does not exist", label: "does not exist"},
         {type: "in", label: "in ..."},
         {type: "not in", label: "not in ..."}
       ],
       onItemAdd: function(value, $item) {
         // if we selected "exists" enable the add button and stop here
-        if (value == "exists") {
+        if (value == "exists" || value == "does not exist") {
           self._labelFilterAddBtn.removeClass("disabled").prop('disabled', false).focus();
           return;
         }
