@@ -9,18 +9,36 @@ function LabelSelector(selector, emptySelectsAll) {
   this._conjuncts = {};
   this._emptySelectsAll = !!emptySelectsAll;
   // expects the JSON format as returned by k8s API
-  // TODO - currently k8s only returns key: value
-  // which represents 'key in (value)'
-  // for now also handle key: null as key exists
+  // Supports both the old selector syntax of just key: value pairs like on RCs
+  // as well as the new matchLabel and matchExpression syntax on newer controllers like ReplicaSets
+  // For now it will also handle key: null as key exists for backwards compatibility from before
+  // the matchExpression support was added.
+  var OPERATOR_MAP = {
+    "In": "in",
+    "NotIn": "not in",
+    "Exists": "exists",
+    "DoesNotExist": "does not exist"
+  };
+
   if (selector) {
-    angular.forEach(selector, function(details, key) {
-      if (details || details === "") {
+    if (selector.matchLabels || selector.matchExpressions) {
+      angular.forEach(selector.matchLabels, function(details, key) {
         this.addConjunct(key, "in", [details]);
-      }
-      else {
-       this.addConjunct(key, "exists", []); 
-      }
-    }, this);
+      }, this);
+      angular.forEach(selector.matchExpressions, function(expression){
+        this.addConjunct(expression.key, OPERATOR_MAP[expression.operator], expression.values);
+      }, this);
+    }
+    else {
+      angular.forEach(selector, function(details, key) {
+        if (details || details === "") {
+          this.addConjunct(key, "in", [details]);
+        }
+        else {
+          this.addConjunct(key, "exists", []); 
+        }
+      }, this);
+    }
   }
 }
 
@@ -90,6 +108,11 @@ LabelSelector.prototype.matches = function(resource) {
           return false;
         }
         break;
+      case "does not exist":
+        if (labels[conjunct.key] || labels[conjunct.key] === "") {
+          return false;
+        }
+        break;
       case "in":
         var found = false;
         if (labels[conjunct.key] || labels[conjunct.key] === "") {
@@ -145,7 +168,13 @@ LabelSelector.prototype.covers = function(selector) {
 // on k8s def for label values
 LabelSelector.prototype._getStringForConjunct = function(conjunct) {
   var conjunctString = conjunct.key;
-  if (conjunct.operator != "exists") {
+  if (conjunct.operator == "exists") {
+    return conjunctString + " exists";
+  }
+  else if (conjunct.operator == "does not exist") {
+    return conjunctString + " does not exist";
+  }
+  else {
     if (conjunct.operator == "not in") {
       conjunctString += " not";
     }
@@ -167,5 +196,9 @@ LabelSelector.prototype._getStringForConjunct = function(conjunct) {
 };
 
 LabelSelector.prototype._getIdForConjunct = function(conjunct) {
-  return conjunct.key + "-" + conjunct.operator + "-" + conjunct.values.join(",");
+  var id = conjunct.key + "-" + conjunct.operator;
+  if (conjunct.values) {
+    id += "-" + conjunct.values.join(",");
+  }
+  return id;
 }; 
