@@ -6,9 +6,9 @@
     <title>Label Selector and Filter example</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-  
-    <!-- example theme uses bootstrap -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- example theme uses patternfly -->
+    <link rel="stylesheet" href="bower_components/patternfly/dist/css/patternfly.min.css" />
 
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
@@ -24,9 +24,9 @@
     </style>
   </head>
 <body ng-app="exampleApp">
-  <div style="margin: 10px 10px 0; position:relative">
+  <div style="margin: 10px 10px 0; position: relative">
     <div class="filter">
-        <div class="navbar-filter-widget"></div>
+      <div class="navbar-filter-widget"></div>
     </div>
     <div class="active-filters"></div>
   </div>
@@ -56,7 +56,7 @@
                 //   LabelFilter.addLabelSuggestionsFromResources(resources, map);
                 // where map will get the new suggestions added to it
                 //
-                // Or you can just create some suggestions yourself (setting suggestions is not required, users have the option to 
+                // Or you can just create some suggestions yourself (setting suggestions is not required, users have the option to
                 // type in their own labels/values)
                 LabelFilter.setLabelSuggestions({
                     label_1: [
@@ -85,7 +85,7 @@
                         {value: "value-4-1"},
                         {value: "value-4-2"},
                         {value: "value-41212121212121-212121212121-21212121212-1212121212"}
-                    ]                  
+                    ]
                 });
 
                 // Do something when the active filters change
@@ -94,10 +94,10 @@
                     // If you have a set of k8s resources, you can filter them by running
                     //   labelSelector.select(resources);
                     // which will return a map of resource name to resource for all resources selected by the label selector
-                    // if you want to check specific resources yourself you can use 
+                    // if you want to check specific resources yourself you can use
                     //   labelSelector.match(resource);
                     // to return a boolean if that resource is matched by the selector
-                });                 
+                });
             });
     </script>
 </body>
