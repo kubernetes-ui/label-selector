@@ -13,11 +13,17 @@ function LabelSelector(selector, emptySelectsAll) {
   // as well as the new matchLabel and matchExpression syntax on newer controllers like ReplicaSets
   // For now it will also handle key: null as key exists for backwards compatibility from before
   // the matchExpression support was added.
-  var OPERATOR_MAP = {
+  this._OPERATOR_MAP = {
     "In": "in",
     "NotIn": "not in",
     "Exists": "exists",
     "DoesNotExist": "does not exist"
+  };
+  this._REVERSE_OPERATOR_MAP = {
+    "in": "In",
+    "not in": "NotIn",
+    "exists": "Exists",
+    "does not exist": "DoesNotExist"
   };
 
   if (selector) {
@@ -26,7 +32,7 @@ function LabelSelector(selector, emptySelectsAll) {
         this.addConjunct(key, "in", [details]);
       }, this);
       angular.forEach(selector.matchExpressions, function(expression){
-        this.addConjunct(expression.key, OPERATOR_MAP[expression.operator], expression.values);
+        this.addConjunct(expression.key, this._OPERATOR_MAP[expression.operator], expression.values);
       }, this);
     }
     else {
@@ -35,7 +41,7 @@ function LabelSelector(selector, emptySelectsAll) {
           this.addConjunct(key, "in", [details]);
         }
         else {
-          this.addConjunct(key, "exists", []); 
+          this.addConjunct(key, "exists", []);
         }
       }, this);
     }
@@ -59,7 +65,7 @@ LabelSelector.prototype.addConjunct = function(key, operator, values) {
 // object that was returned from a call to addConjunct
 LabelSelector.prototype.removeConjunct = function(conjunct) {
   if (conjunct.id) {
-    delete this._conjuncts[conjunct.id];  
+    delete this._conjuncts[conjunct.id];
   }
   else {
     delete this._conjuncts[conjunct];
@@ -139,7 +145,7 @@ LabelSelector.prototype.matches = function(resource) {
     }
   }
   return true;
-};  
+};
 
 LabelSelector.prototype.hasConjunct = function(conjunct) {
   return this._conjuncts[this._getIdForConjunct(conjunct)] ? true : false;
@@ -162,6 +168,23 @@ LabelSelector.prototype.covers = function(selector) {
     }
   }
   return true;
+};
+
+// Exports the labelSelector as a string in the API format, exports as matchExpressions
+LabelSelector.prototype.exportJSON = function() {
+  var result = {
+    matchExpressions: []
+  };
+  for (var id in this._conjuncts) {
+    var conjunct = this._conjuncts[id];
+    var expression = {
+      key: conjunct.key,
+      operator: this._REVERSE_OPERATOR_MAP[conjunct.operator],
+      values: conjunct.values
+    };
+    result.matchExpressions.push(expression);
+  }
+  return JSON.stringify(result);
 };
 
 // We assume label values have no whitespace, commas, parens, etc. based
@@ -201,4 +224,4 @@ LabelSelector.prototype._getIdForConjunct = function(conjunct) {
     id += "-" + conjunct.values.join(",");
   }
   return id;
-}; 
+};

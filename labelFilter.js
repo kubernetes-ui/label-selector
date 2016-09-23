@@ -3,7 +3,7 @@
 try { angular.module("kubernetesUI") } catch(e) { angular.module("kubernetesUI", []) }
 
 angular.module('kubernetesUI')
-.factory('LabelFilter', [function() {
+.factory('LabelFilter', function($location) {
   function LabelFilter() {
     this._existingLabels = {};
     this._labelSelector = new LabelSelector(null, true);
@@ -31,6 +31,42 @@ angular.module('kubernetesUI')
       this._labelFilterKeySelectize.load(function(callback) {
         callback(self._getLabelFilterKeys());
       });
+    }
+  };
+
+  LabelFilter.prototype.persistFilterState = function(persist) {
+    this._shouldPersistState = !!persist;
+  };
+
+  LabelFilter.prototype._persistState = function() {
+    if (!this._shouldPersistState)  {
+      return;
+    }
+    if (this._labelSelector.isEmpty()) {
+      var search = $location.search();
+      search.labelFilter = null;
+      $location.replace().search(search);
+    }
+    else {
+      var search = $location.search();
+      search.labelFilter = this._labelSelector.exportJSON();
+      $location.replace().search(search);
+    }
+  };
+
+  LabelFilter.prototype.readPersistedState = function() {
+    var labelFilterStr = $location.search().labelFilter;
+    if (labelFilterStr) {
+      try {
+        this._labelSelector = new LabelSelector(JSON.parse(labelFilterStr), true);
+      }
+      catch(e) {
+        // wasn't valid JSON so don't use the data
+        this._labelSelector = new LabelSelector({}, true);
+      }
+    }
+    else {
+      this._labelSelector = new LabelSelector({}, true);
     }
   };
 
@@ -70,6 +106,8 @@ angular.module('kubernetesUI')
         this._labelFilterActiveElement.hide();
       }
     }
+
+    this._persistState();
 
     if (!dontFireCallbacks) {
       this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
@@ -121,11 +159,11 @@ angular.module('kubernetesUI')
         $('<span>')
           .text(opts.addButtonText || "Add Filter")
       );
-    
+
     this._labelFilterActiveFiltersElement = $('<span>')
       .addClass("label-filter-active-filters")
       .appendTo(activeFiltersElement);
-      
+
     // Render active filters area
     this._labelFilterActiveElement = $('<span>')
       .addClass("label-filter-clear")
@@ -347,6 +385,7 @@ angular.module('kubernetesUI')
 
   LabelFilter.prototype._addActiveFilter = function(key, operator, values) {
     var filter = this._labelSelector.addConjunct(key, operator, values);
+    this._persistState();
     this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
     this._renderActiveFilter(filter);
   };
@@ -378,11 +417,13 @@ angular.module('kubernetesUI')
     }
 
     this._labelSelector.removeConjunct(filter);
+    this._persistState();
     this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
   };
 
   LabelFilter.prototype._clearActiveFilters = function() {
     this._labelSelector.clearConjuncts();
+    this._persistState();
     this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
   };
 
@@ -406,4 +447,4 @@ angular.module('kubernetesUI')
   };
 
   return new LabelFilter();
-}]);
+});
