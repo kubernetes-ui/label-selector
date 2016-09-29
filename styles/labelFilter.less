@@ -5,35 +5,37 @@
 
 @import "../bower_components/selectize/dist/less/selectize.default.less";
 
-// Selectize variable overrides
+// variables
+@btn-default-border: #bbb;
 @color-top: transparent;
 @color-bottom: transparent;
-@btn-default-border: #b7b7b7;
-@font-size-base: 12px;
-@font-size-large: ceil(@font-size-base * 1.1); // ~15px
+@brand-primary: #39a5dc;
+@dropdown-link-focus-bg: #def3ff;
+@dropdown-link-hover-border-color: #bee1f4;
+@dropdown-link-hover-color: #4d5258;
 @dark-blue: #006e9c;
-
+@font-size-base: 12px;
+@input-border-focus:             #0088ce;
+@input-border-hover:             #7dc3e8;
+@input-color-placeholder:        #999;
+@navbar-label-filter-bg: #fff;
+@navbar-menu-border: 1px solid @btn-default-border;
 @screen-xs:                  480px;
 @screen-xs-min:              @screen-xs;
 @screen-xs-max:              (@screen-sm-min - 1);
-
 @screen-sm:                  768px;
 @screen-sm-min:              @screen-sm;
 @screen-sm-max:              (@screen-md-min - 1);
 @screen-tablet:              @screen-sm-min;
-
 @screen-md:                  992px;
 @screen-md-min:              @screen-md;
 @screen-desktop:             @screen-md-min;
-
 @screen-lg:                  1200px;
 @screen-lg-min:              @screen-lg;
 @screen-md-max:              (@screen-lg-min - 1);
-
 @screen-xlg:                  1400px;
 @screen-xlg-min:              @screen-xlg;
 @screen-lg-max:              (@screen-xlg-min - 1);
-
 @selectize-active-label-bg: #006e9c;
 @selectize-arrow-size: 0;
 @selectize-border-radius: 1px;
@@ -41,6 +43,8 @@
 @selectize-color-dropdown-border-top: transparent;
 @selectize-color-item: @dark-blue;
 @selectize-color-item-border: @btn-default-border;
+@selectize-highlight: transparent;
+@selectize-min-width: 40%;
 @selectize-padding-x: 10px;
 @selectize-padding-y: 7px;
 @selectize-padding-dropdown-item-y: @selectize-padding-y;
@@ -49,20 +53,26 @@
 @selectize-vertical-gradient-color-end: #1da7ee;
 @selectize-vertical-gradient-color-start: #178ee9;
 @selectize-width-item-border: 0;
-@navbar-label-filter-bg: #fff;
-@navbar-input-height: 27px;
-@navbar-menu-border: 1px solid @btn-default-border;
 
-//** Border color for inputs on focus
-@input-border-focus:             #66afe9;
-//** .form-control-focus
+// mixins
 .filter-active-focus(@color: @input-border-focus) {
   @color-rgba: rgba(red(@color), green(@color), blue(@color), .6);
   border-color: @color;
   outline: 0;
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @color-rgba;
 }
-
+.placeholder(@color: @input-color-placeholder) {
+  &::placeholder            { color: @color; font-style: italic; }
+}
+.placeholder(@color: @input-color-placeholder) {
+  // Firefox
+  &::-moz-placeholder {
+    color: @color;
+    opacity: 1; // Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526
+  }
+  &:-ms-input-placeholder { color: @color; } // Internet Explorer 10+
+  &::-webkit-input-placeholder  { color: @color; } // Safari and Chrome
+}
 
 // Clearfix
 // Source: http://nicolasgallagher.com/micro-clearfix-hack/
@@ -91,88 +101,65 @@
 overflow-wrap: break-word; // new name as per the CSS3 spec
 }
 
-// Override selectize remove_button code
-.selectize-control.plugin-remove_button {
-  [data-value] {
-    font-size: @font-size-base;
-    .remove {
-      border-left: 1px solid darken(@dark-blue, 5%);
-      padding: 0;
-    }
-  }
-}
-
-
 // Override original selectize code
 .selectize-control {
-  &.single {
-    .selectize-input {
-      .selectize-vertical-gradient(@color-top, @color-bottom);
-    }
+  &.multi .selectize-input [data-value] {
+    box-shadow: none;
+    line-height: 18px;
+    margin: 2px 4px 2px 0;
+    padding: 0 6px; // prevent text jump when
+    text-shadow: @selectize-text-shadow;
+    .selectize-border-radius(2px);
+    .selectize-vertical-gradient(@selectize-color-item, @selectize-color-item) !important;
   }
-  &.multi {
-    .selectize-input {
-      [data-value] {
-        padding: 0 6px; // prevent text jump when
-        margin: 0 3px 0 0;
-        &+ [data-value] {
-          margin-top: 3px;
-        }
-        text-shadow: @selectize-text-shadow;
-        .selectize-border-radius(2px);
-        .selectize-vertical-gradient(@selectize-color-item, @selectize-color-item);
-      }
-    }
+  &.plugin-remove_button .selectize-input .remove {
+    border-left: 0;
+    padding: 1px 0 0 0;
   }
 }
 .selectize-control.single .selectize-input, .selectize-dropdown.single {
   border-color: @btn-default-border;
 }
 .selectize-dropdown [data-selectable], .selectize-dropdown .optgroup-header {
-    padding: 5px 20px 5px 7px;
-    .word-break-all();
+  padding: 5px 20px 5px 7px;
+  .word-break-all();
 }
-
 
 // Custom code for label filter
 .filter {
-  display:flex;
-  flex: 1 1 auto; // flex-basis needs to be auto or else Safari collapses
-  flex-flow: row nowrap;
-  align-items: stretch;
-  min-width: 220px;
+  display: table;
+  width: 100%;
   .navbar-filter-widget {
-    display:flex;
-    flex: 1 1 0%;
-    flex-flow: row nowrap;
-    align-items: stretch;
-    min-width: 0;
-    .clearfix();
+    display: table-row; // for mobile Safari height bug
     .label-filter {
       background: @navbar-label-filter-bg;
-      flex: 0 1 auto;
-      min-width: 0;
-      min-height: @navbar-input-height;
       border: @navbar-menu-border;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
       border-radius: @selectize-border-radius;
+      display: table-cell;
+      transition: "border-color ease-in-out .15s, box-shadow ease-in-out .15s";
+      width: 100%;
       &.filter-active {
         .filter-active-focus();
       }
+      &:hover {
+        border-color: @input-border-hover;
+      }
       .selectize-control {
-        display: inline-flex;
+        display: inline-block;
         .item {
-          .word-break-all();
           max-width: 100%;
+          .word-break-all();
         }
         .selectize-input {
           background: transparent;
-          vertical-align: middle;
-          padding: 2px 8px;
           border: 0;
           box-shadow: none;
-          font-size: @font-size-base;
           flex: 0 1 auto;
-          min-width: 160px; // set default width
+          font-size: @font-size-base;
+          line-height: 22px; // 2px shorter for Safari
+          padding: 0 6px;
+          vertical-align: middle;
           width: 100%;
           &.full {
             min-width: 0; // allow value to control width
@@ -182,39 +169,48 @@ overflow-wrap: break-word; // new name as per the CSS3 spec
           }
           input {
             font-size: @font-size-base;
-            height: 21px; // keep IE from clipping text descenders
+            height: 22px; // so IE doesn't clip placeholder decenders
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            .placeholder();
           }
         }
       }
     }
     .label-filter-add.btn {
       border-left: 0;
-      border-radius: 0;
-      font-size: @font-size-base;
-      margin-right: @selectize-padding-x;
-      opacity: 1;
-      height: @navbar-input-height;
-      align-items: center;
-      display:flex;
-      flex: 0 0 auto;
-      flex-direction: column;
-      justify-content:center;
-      &.disabled {
-        opacity: .75;
-      }
+      border-radius: 1px;
+      display: table-cell;
     }
   }
 }
 
 .selectize-dropdown {
-  z-index: 9999;
-  font-size: @font-size-base;
-  margin: 0 0 0 -1px;
-  width: 100% !important; // overwrite selectize inline width and
   border: @navbar-menu-border;
-  .selectize-dropdown-content {
-    .option {
-      &.selected {}
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  font-size: @font-size-base;
+  margin: 1px 0 0 -1px;
+  min-width: @selectize-min-width;
+  padding: 5px 0;
+  z-index: 9999;
+  @media (min-width: @screen-sm-min) {
+    min-width: 0;
+    width: auto !important; // overwrite inline selectize attribute
+    white-space: nowrap;
+  }
+  [data-selectable] {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    line-height: 1.66666667;
+    padding: 1px 10px;
+    &.active {
+      background: @dropdown-link-focus-bg;
+      border-color: @dropdown-link-hover-border-color;
+      color: @dropdown-link-hover-color;
+    }
+    .highlight {
+      background: @selectize-highlight;
+      font-weight: bold;
     }
   }
 }
@@ -226,7 +222,6 @@ overflow-wrap: break-word; // new name as per the CSS3 spec
   .label-filter-active-filters {
     display: inline-flex;
     flex-wrap: wrap;
-    padding-bottom: 3px;
     .label {
       align-items: center;
       background: @selectize-active-label-bg;
@@ -236,15 +231,8 @@ overflow-wrap: break-word; // new name as per the CSS3 spec
       font-size: @font-size-base;
       font-weight: normal;
       line-height: 13px;
-      padding-bottom: .3em;
-      padding-top: .3em;
-      margin-bottom: 2px;
-      margin-left: 0;
-      margin-right: 3px;
-      /* Necessary even if line-height is set on active-filters
-         when a label wraps. Otherwise, there is no margin or padding
-         between filter and the input above. */
-      margin-top: 2px;
+      padding: .3em 6px;
+      margin: 3px 3px 0 0;
       text-shadow: @selectize-text-shadow;
       .word-break-all();
       white-space: normal;
@@ -252,78 +240,21 @@ overflow-wrap: break-word; // new name as per the CSS3 spec
         background: @selectize-active-label-bg;
       }
       i.fa-times {
-        font-size: @font-size-base - 1;
-        padding-left: 5px;
+        font-size: 10px;
+        padding-left: 10px;
       }
     }
     .label-filter-clear {
       display: inline-flex;
-      margin: 2px 5px 2px 0;
+      margin: 3px 3px 0 0;
       align-items: center;
       .label-filtering-remove-all {
+        background: @brand-primary;
         margin: 0;
         i.fa.fa-filter {
           padding-right: 5px;
         }
       }
-    }
-  }
-}
-
-@media (min-width: @screen-sm-min) {
-  .filter {
-    .active-filters {
-      margin-top: 0;
-    }
-    .selectize-control {
-      display: inline-block;
-    }
-  }
-  .selectize-dropdown {
-    width: auto !important; // overwrite inline selectize attribute
-    white-space: nowrap;
-  }
-  &.label-filter-key {
-    .selectize-input {
-      &.not-full {
-        width: auto;
-      }
-    }
-  }
-}
-
-.navbar-filter-widget-collapse .form-group {
- margin-bottom: 0;
- flex: 1 1 0%;
- min-width: 0;
-}
-
-@media (max-width: @screen-xs-max) {
-  .selectize-dropdown {
-    left: 0 !important; // overwrite inline selectize attribute
-    margin: 0;
-  }
-}
-
-.filter .navbar-filter-widget {
- @media(min-width: @screen-sm-min) {
- }
- .label-filter-add.btn {
-  margin-right: 0;
-  display:flex;
-  flex: 0 0 auto;
-  align-items: stretch;
- }
-}
-
-@media (max-width: @screen-xs-max) {
- .filter .navbar-filter-widget .label-filter {
-   min-width: initial;
-   width: 84%; // Width of the input field that allows for the 'add' button to be appended down to 320px
- }
- .filter .navbar-filter-widget {
-    .selectize-input {
-     width: auto !important;
     }
   }
 }

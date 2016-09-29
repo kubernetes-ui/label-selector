@@ -30,7 +30,7 @@ The LabelSelector global lets you match kubernetes label selectors to sets of re
 
 ```
 // Create a new label selector
-// 
+//
 // selector (optional) - the JSON format of a label selector as returned by k8s API
 //      Example would be the label selector returned on a replication controller
 // emptySelectsAll (optional) - whether a label selector with no conjuncts
@@ -113,7 +113,7 @@ LabelFilter.onActiveFiltersChanged(function(labelSelector){})
 ### Theme
 
 
-The example theme used in `index.html` is based on bootstrap, however bootstrap is not required as a bower dependency and you can change the theme however you want.
+The example theme used in `index.html` is based on [PatternFly](https://www.patternfly.org), however [PatternFly](https://www.patternfly.org) is not required as a bower dependency and you can change the theme however you want.
 
 All icons are from [FontAwesome](http://fortawesome.github.io/Font-Awesome/icons/) which is included as a bower dependency.
 
@@ -125,7 +125,7 @@ User first selects a label key.
 
 ![Selecting a label key](screenshots/labelFilterKey.png?raw=true)
 
-Then chooses from the "in", "not in", and "exists" operators.
+Then chooses from the "exists", "does not exist", "in", or "not in" operators.
 
 ![Selecting a label selector operator](screenshots/labelFilterOperator.png?raw=true)
 

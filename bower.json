@@ -31,6 +31,6 @@
     "fontawesome": "~4.3.0"
   },
   "devDependencies": {
-    "bootstrap": "~3.3.4"
+    "patternfly": "3.5.1"
   }
 }

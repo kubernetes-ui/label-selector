@@ -223,7 +223,7 @@ angular.module('kubernetesUI')
           callback(options);
         });
 
-        self._labelFilterOperatorSelectizeInput.css("display", "inline-flex");
+        self._labelFilterOperatorSelectizeInput.css("display", "inline-block");
         var operator = self._labelFilterOperatorSelectize.getValue();
         if (!operator) {
           self._labelFilterOperatorSelectize.focus();
@@ -272,7 +272,7 @@ angular.module('kubernetesUI')
         }
 
         // otherwise
-        self._labelFilterValuesSelectizeInput.css("display", "inline-flex");
+        self._labelFilterValuesSelectizeInput.css("display", "inline-block");
         self._labelFilterValuesSelectize.focus();
       },
       onItemRemove: function(value) {
