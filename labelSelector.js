@@ -151,6 +151,10 @@ LabelSelector.prototype.hasConjunct = function(conjunct) {
   return this._conjuncts[this._getIdForConjunct(conjunct)] ? true : false;
 };
 
+LabelSelector.prototype.findConjunctsMatching = function(operator, key) {
+  return _.pick(this._conjuncts, _.matches({operator: operator, key: key}));
+};
+
 // Test whether this label selector covers the given selector
 LabelSelector.prototype.covers = function(selector) {
   if (this.isEmpty()) {
@@ -159,15 +163,45 @@ LabelSelector.prototype.covers = function(selector) {
     return false;
   }
 
-  // TODO - currently k8s only returns key: value
-  // which represents 'key in (value)'  So we only handle
-  // the IN operator with single values for now
-  for (var id in this._conjuncts) {
-    if (!selector.hasConjunct(this._conjuncts[id])) {
-      return false;
+  return _.every(this._conjuncts, function(conjunct) {
+    // Return true immediately if we find an exact match for operator/key/values
+    if (selector.hasConjunct(conjunct)) {
+      return true;
     }
-  }
-  return true;
+
+    // If we can't find a conjunct that matches exactly, do a more detailed check
+    switch(conjunct.operator) {
+      case "exists":
+        // If an Exists conjunct existed for the same key in selector it
+        // would have passed the exact match, just need to check if an In
+        // conjunct exists for the same key
+        return !_.isEmpty(selector.findConjunctsMatching("in", conjunct.key));
+      case "does not exist":
+        // A DoesNotExist can only cover a DoesNotExist operator, if we got here
+        // then we didn't have a DNE with the same key so we know we can't cover
+        return false;
+      case "in":
+        // In (A,B,C) covers In (A,B) AND In (B,C)
+        var inConjuncts = selector.findConjunctsMatching("in", conjunct.key);
+        if (_.isEmpty(inConjuncts)) {
+          return false;
+        }
+        return _.every(inConjuncts, function(inConjunct) {
+          return inConjunct.values.length === _.intersection(inConjunct.values, conjunct.values).length;
+        });
+      case "not in":
+      // NotIn (A,B) covers NotIn (A,B,C) AND NotIn (A,B,D)
+        var notInConjuncts = selector.findConjunctsMatching("not in", conjunct.key);
+        if (_.isEmpty(notInConjuncts)) {
+          return false;
+        }
+        return _.every(notInConjuncts, function(notInConjunct) {
+          return conjunct.values.length === _.intersection(notInConjunct.values, conjunct.values).length;
+        });
+    }
+
+    return true;
+  });
 };
 
 // Exports the labelSelector as a string in the API format, exports as matchExpressions

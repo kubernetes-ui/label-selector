@@ -28,7 +28,8 @@
   "dependencies": {
     "angular": "~1.3.8",
     "selectize": "~0.12.1",
-    "fontawesome": "~4.3.0"
+    "fontawesome": "~4.3.0",
+    "lodash": "~3.10.1"
   },
   "devDependencies": {
     "patternfly": "3.5.1"
