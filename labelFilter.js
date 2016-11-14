@@ -89,7 +89,9 @@ angular.module('kubernetesUI')
   LabelFilter.prototype.setLabelSelector = function(labelSelector, dontFireCallbacks) {
     // This can potentially get called before the label filter has been created
     if (this._labelFilterActiveFiltersElement) {
-      this._labelFilterActiveFiltersElement.empty();
+      this._labelFilterActiveFiltersElement
+        .find('.label-filter-active-filter')
+        .remove();
     }
 
     this._labelSelector = labelSelector;
