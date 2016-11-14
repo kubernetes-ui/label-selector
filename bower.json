@@ -1,6 +1,6 @@
 {
   "name": "kubernetes-label-selector",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Provides a LabelSelector object that understand kubernetes labels and label selector syntax, and works directly with JSON API objects from kubernetes.  Also provides a label filtering widget.",
   "moduleType": [
     "globals"
