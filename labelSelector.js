@@ -85,14 +85,13 @@ LabelSelector.prototype.each = function(fn) {
 };
 
 LabelSelector.prototype.select = function(resources) {
-  var selectedResources = {};
-  var self = this;
-  angular.forEach(resources, function(resource, resId) {
-    if (self.matches(resource)) {
-      selectedResources[resId] = resource;
-    }
-  });
-  return selectedResources;
+  // If passed an array, return an array.
+  if (_.isArray(resources)) {
+    return _.filter(resources, this.matches, this);
+  }
+
+  // Otherwise handle it as a map.
+  return _.pick(resources, this.matches, this);
 };
 
 LabelSelector.prototype.matches = function(resource) {
