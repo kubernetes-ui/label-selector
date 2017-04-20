@@ -184,11 +184,7 @@ angular.module('kubernetesUI')
               .text("Clear filters")
           )
       ).click(function() {
-        $(this).hide();
-        self._labelFilterActiveFiltersElement
-          .find('.label-filter-active-filter')
-          .remove();
-        self._clearActiveFilters();
+        self.clear();
       });
 
     // Create selectize widgets for the select fields and wire them together
@@ -392,6 +388,20 @@ angular.module('kubernetesUI')
     this._renderActiveFilter(filter);
   };
 
+  LabelFilter.prototype.clear = function() {
+    if (this._labelFilterActiveFiltersElement) {
+      this._labelFilterActiveFiltersElement.find('.label-filter-active-filter').remove();
+    }
+
+    if (this._labelFilterActiveElement) {
+      this._labelFilterActiveElement.hide();
+    }
+
+    this._labelSelector.clearConjuncts();
+    this._persistState();
+    this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
+  };
+
   LabelFilter.prototype._renderActiveFilter = function(filter) {
     // render the new filter indicator
     $('<a>')
@@ -419,12 +429,6 @@ angular.module('kubernetesUI')
     }
 
     this._labelSelector.removeConjunct(filter);
-    this._persistState();
-    this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
-  };
-
-  LabelFilter.prototype._clearActiveFilters = function() {
-    this._labelSelector.clearConjuncts();
     this._persistState();
     this._onActiveFiltersChangedCallbacks.fire(this._labelSelector);
   };
