@@ -87,11 +87,11 @@ LabelSelector.prototype.each = function(fn) {
 LabelSelector.prototype.select = function(resources) {
   // If passed an array, return an array.
   if (_.isArray(resources)) {
-    return _.filter(resources, this.matches, this);
+    return _.filter(resources, _.bind(this.matches, this));
   }
 
   // Otherwise handle it as a map.
-  return _.pick(resources, this.matches, this);
+  return _.pickBy(resources, _.bind(this.matches, this));
 };
 
 LabelSelector.prototype.matches = function(resource) {
@@ -151,7 +151,7 @@ LabelSelector.prototype.hasConjunct = function(conjunct) {
 };
 
 LabelSelector.prototype.findConjunctsMatching = function(operator, key) {
-  return _.pick(this._conjuncts, _.matches({operator: operator, key: key}));
+  return _.pickBy(this._conjuncts, _.matches({operator: operator, key: key}));
 };
 
 // Test whether this label selector covers the given selector
