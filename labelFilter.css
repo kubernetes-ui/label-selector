@@ -90,7 +90,7 @@
   font-size: 23px;
 }
 /**
- * selectize.default.css (v0.12.3) - Default Theme
+ * selectize.default.css (v0.12.4) - Default Theme
  * Copyright (c) 2013–2015 Brian Reavis & contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -256,6 +256,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 200px;
+  -webkit-overflow-scrolling: touch;
 }
 .selectize-control.single .selectize-input,
 .selectize-control.single .selectize-input input {
@@ -433,10 +434,6 @@
   margin-right: 0 !important;
 }
 .filter .navbar-filter-widget .label-filter .selectize-control .selectize-input input::-webkit-input-placeholder {
-  color: #999;
-  font-style: italic;
-}
-.filter .navbar-filter-widget .label-filter .selectize-control .selectize-input input::-moz-placeholder {
   color: #999;
   font-style: italic;
 }
