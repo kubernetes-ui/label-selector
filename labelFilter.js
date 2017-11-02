@@ -70,6 +70,19 @@ angular.module('kubernetesUI')
     }
   };
 
+  // Returns an object containing the appropriate URL query param for the persisted filter state
+  // Can be used with helpers like URI.search()
+  // Expects a LabelSelector object
+  LabelFilter.prototype.persistedStateForSelector = function(selector) {
+    if (!selector) {
+      return {};
+    }
+
+    return {
+      labelFilter: selector.isEmpty() ? null : selector.exportJSON()
+    };
+  };  
+
   LabelFilter.prototype._extractLabelsFromItem = function(item, map) {
     var labels = item.metadata ? item.metadata.labels : {};
     var self = this;
