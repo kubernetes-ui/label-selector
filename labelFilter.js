@@ -181,7 +181,7 @@ angular.module('kubernetesUI')
           )
           .append(
             $('<span>')
-              .text("Clear filters")
+              .text("Clear All Filters")
           )
       ).click(function() {
         self.clear();
